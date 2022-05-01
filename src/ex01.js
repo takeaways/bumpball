@@ -41,14 +41,19 @@ export default function example() {
   controls.enableDamping = true;
 
   // Mesh
-  const geometry = new THREE.SphereGeometry(1, 64, 64);
+  const geometry = new THREE.BufferGeometry();
+  const count = 1000;
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < positions.length; i++) {
+    positions[i] = (Math.random() - 0.5) * 10;
+  }
+  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   const material = new THREE.PointsMaterial({
-    size: 0.1,
-    sizeAttenuation: false,
+    size: 0.03,
+    color: "plum",
   });
-  const points = new THREE.Points(geometry, material);
-  scene.add(points);
-
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
   // 그리기
   const clock = new THREE.Clock();
 
@@ -56,7 +61,6 @@ export default function example() {
     const delta = clock.getDelta();
 
     controls.update();
-    points.rotation.y += 0.001;
 
     renderer.render(scene, camera);
     renderer.setAnimationLoop(draw);
