@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-// ----- 주제: 기본 Geometry 파티클
+// ----- 주제: Point 좌표에 Mesh 생성
 
 export default function example() {
   // Renderer
@@ -41,30 +41,28 @@ export default function example() {
   controls.enableDamping = true;
 
   // Mesh
-  const geometry = new THREE.BufferGeometry();
-  const count = 1000;
-  const positions = new Float32Array(count * 3);
-  const colors = new Float32Array(count * 3);
-  for (let i = 0; i < positions.length; i++) {
-    positions[i] = (Math.random() - 0.5) * 10;
-    colors[i] = Math.random();
+  const planeMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.3, 0.3),
+    new THREE.MeshBasicMaterial({
+      color: "red",
+      side: THREE.DoubleSide,
+    })
+  );
+
+  const sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
+  const positionArray = sphereGeometry.attributes.position.array;
+  let plane;
+  for (let i = 0; i < positionArray.length; i += 3) {
+    plane = planeMesh.clone();
+    plane.position.x = positionArray[i];
+    plane.position.y = positionArray[i + 1];
+    plane.position.z = positionArray[i + 2];
+
+    plane.lookAt(0, 0, 0);
+
+    scene.add(plane);
   }
-  geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
-  const textureloader = new THREE.TextureLoader();
-  const particleTexture = textureloader.load("/images/star.png");
-
-  const material = new THREE.PointsMaterial({
-    size: 0.3,
-    map: particleTexture,
-    transparent: true,
-    alphaMap: particleTexture,
-    depthWrite: false,
-    vertexColors: true,
-  });
-  const particles = new THREE.Points(geometry, material);
-  scene.add(particles);
   // 그리기
   const clock = new THREE.Clock();
 
