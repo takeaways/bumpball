@@ -44,10 +44,13 @@ export default function example() {
   const geometry = new THREE.BufferGeometry();
   const count = 1000;
   const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
   for (let i = 0; i < positions.length; i++) {
     positions[i] = (Math.random() - 0.5) * 10;
+    colors[i] = Math.random();
   }
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
   const textureloader = new THREE.TextureLoader();
   const particleTexture = textureloader.load("/images/star.png");
@@ -58,6 +61,7 @@ export default function example() {
     transparent: true,
     alphaMap: particleTexture,
     depthWrite: false,
+    vertexColors: true,
   });
   const particles = new THREE.Points(geometry, material);
   scene.add(particles);
