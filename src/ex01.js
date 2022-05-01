@@ -48,9 +48,16 @@ export default function example() {
     positions[i] = (Math.random() - 0.5) * 10;
   }
   geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+  const textureloader = new THREE.TextureLoader();
+  const particleTexture = textureloader.load("/images/star.png");
+
   const material = new THREE.PointsMaterial({
-    size: 0.03,
-    color: "plum",
+    size: 0.3,
+    map: particleTexture,
+    transparent: true,
+    alphaMap: particleTexture,
+    depthWrite: false,
   });
   const particles = new THREE.Points(geometry, material);
   scene.add(particles);
