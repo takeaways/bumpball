@@ -115,7 +115,7 @@ canvas.addEventListener("click", () => {
   spheres.push(newSphere);
   newSphere.cannonBody.addEventListener(
     "collide",
-    new CollideSound("/sounds/boing.mp3").callback
+    new CollideSound("sounds/boing.mp3").callback
   );
 });
 
