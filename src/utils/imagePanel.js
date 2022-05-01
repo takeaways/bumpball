@@ -11,6 +11,11 @@ export class ImagePanel {
     this.mesh.position.set(x, y, z);
     this.mesh.lookAt(0, 0, 0);
 
+    // 회전각
+    this.sphereRotationX = this.mesh.rotation.x;
+    this.sphereRotationY = this.mesh.rotation.y;
+    this.sphereRotationZ = this.mesh.rotation.z;
+
     scene.add(this.mesh);
   }
 }
