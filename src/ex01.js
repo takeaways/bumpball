@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { ImagePanel } from "./utils/imagePanel";
 
-// ----- 주제: Point 좌표에 Mesh 생성
+// ----- 주제: Point 좌표에 Mesh 생성 형태 변경
 
 export default function example() {
   // Renderer
@@ -41,26 +42,22 @@ export default function example() {
   controls.enableDamping = true;
 
   // Mesh
-  const planeMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.3, 0.3),
-    new THREE.MeshBasicMaterial({
-      color: "red",
-      side: THREE.DoubleSide,
-    })
-  );
 
+  const planeGeometry = new THREE.PlaneGeometry(0.3, 0.3);
+  const textureLoader = new THREE.TextureLoader();
   const sphereGeometry = new THREE.SphereGeometry(1, 8, 8);
   const positionArray = sphereGeometry.attributes.position.array;
-  let plane;
+  let imagePanel;
   for (let i = 0; i < positionArray.length; i += 3) {
-    plane = planeMesh.clone();
-    plane.position.x = positionArray[i];
-    plane.position.y = positionArray[i + 1];
-    plane.position.z = positionArray[i + 2];
-
-    plane.lookAt(0, 0, 0);
-
-    scene.add(plane);
+    imagePanel = new ImagePanel({
+      textureLoader,
+      scene,
+      geometry: planeGeometry,
+      imageSrc: `/images/0${Math.ceil(Math.random() * 5)}.jpg`,
+      x: positionArray[i],
+      y: positionArray[i + 1],
+      z: positionArray[i + 2],
+    });
   }
 
   // 그리기
